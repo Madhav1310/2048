@@ -25,23 +25,25 @@ class GameField(object):
 
     def move(self, direction):
         def move_row_left(row):
+            # Function to collapse the row by removing zeros and merging tiles
             def tighten(row):
                 new_row = [i for i in row if i != 0]
                 new_row += [0 for i in range(len(row) - len(new_row))]
                 return new_row
 
+            # Function to merge the row and update the score
             def merge(row):
                 pair = False
                 new_row = []
                 for i in range(len(row)):
                     if pair:
                         new_row.append(2 * row[i])
-                        self.score += 2 * row[i]
+                        self.score += 2 * row[i]  # Update the score
                         pair = False
                     else:
                         if i + 1 < len(row) and row[i] == row[i + 1]:
                             pair = True
-                            new_row.append(0)
+                            new_row.append(0)  
                         else:
                             new_row.append(row[i])
                 assert len(new_row) == len(row)
@@ -59,7 +61,7 @@ class GameField(object):
         if direction in moves:
             if self.move_is_possible(direction):
                 self.field = moves[direction](self.field)
-                self.spawn()
+                self.spawn()  # Spawn a new tile after a successful move
                 return True
             else:
                 return False
